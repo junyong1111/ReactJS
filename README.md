@@ -2,6 +2,12 @@
 
 ### 본 정리는 인프론 John Ahn 따라하며 배우는 노드, 리액트 시리즈 - 기본 강의를 참고하였습니다.
 
+### #1 Node JS 와 Express JS 설치
+
+<details>
+<summary> Node JS 와 Express JS 설치 </summary>
+<div markdown="1">
+
 **NodeJS**
 
 - NodeJS가 나오기 전까지는 Javascript를 브라우저에서만 사용가능했는데 서버사이드에서 쓸 수 있게 해주는 언어
@@ -81,6 +87,14 @@
 
 <img width="636" alt="스크린샷 2022-12-27 오후 6 25 50" src="https://user-images.githubusercontent.com/79856225/209817264-f65887ac-aa0b-451c-82bb-bc387ebb68f0.png">
 
+</div>
+</details>
+
+### #2 MongoDB 연결
+
+<details>
+<summary> MongoDB 연결 </summary>
+<div markdown="1">
 **MongoDB 로그인**
 
 - 회원가입 후 로그인
@@ -174,6 +188,16 @@
     3. npm run start 명령어를 이용하여 확인
         
         <img width="595" alt="스크린샷 2022-12-28 오후 8 28 19" src="https://user-images.githubusercontent.com/79856225/209817303-69d05598-6f06-489f-9050-462782141465.png">
+</div>
+</details>
+
+
+### #3 MonoDB model & Schema
+
+
+<details>
+<summary> MonoDB model & Schema </summary>
+<div markdown="1">
 
 <img width="324" alt="스크린샷 2022-12-28 오후 8 29 36" src="https://user-images.githubusercontent.com/79856225/209817665-4dfbd0a4-d301-40c6-8515-47b09dd7cb62.png">
 
@@ -226,3 +250,18 @@
     const User = mongoose.model('User', userSchema) //스키마를 모델로 감싸줌
     module.exports = {User} //다른곳에서 사용할 수 있게 하기위해
     ```
+
+</div>
+</details>
+
+
+
+<!--
+<details>
+<summary>  </summary>
+<div markdown="1">
+
+</div>
+</details>
+----------------------
+-->
