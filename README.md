@@ -2,259 +2,259 @@
 
 ### 본 정리는 인프론 John Ahn 따라하며 배우는 노드, 리액트 시리즈 - 기본 강의를 참고하였습니다.
 
-### #1 Node JS 와 Express JS 설치
+### #11 리액트 소개 및 설치
 
 <details>
-<summary> Node JS 와 Express JS 설치 </summary>
+<summary>리액트 소개 및 설치 </summary>
 <div markdown="1">
 
-**NodeJS**
+- **전체 흐름도**
+    
+    <img width="657" alt="스크린샷 2022-12-28 오후 9 59 00" src="https://user-images.githubusercontent.com/79856225/210166327-b74f2fca-e309-4485-b2c2-720bf16693ea.png">
 
-- NodeJS가 나오기 전까지는 Javascript를 브라우저에서만 사용가능했는데 서버사이드에서 쓸 수 있게 해주는 언어
+    
 
-**ExpressJS**
+**프론트도 다루기 위해서 React JS 사용**
 
-- NodeJS를 이용하여 자동차를 만드는 것
-- NodeJS를 이용하여 웹 개발을 도와주는 프레임워크
+**React JS는 2013년도에 페이스북에서 만들어진 라이브러리이다.**
 
-### **NodeJS 설치 및 폴더 생성**
+- **특징**
+    - **컴포넌트로 이루어져 있어 재사용이 용이하다.**
+    - **Virtual DOM**
+        - Real DOM VS Virtual DOM
+            - **10개의 리스트 중 1개만 변화한 경우**
+                - Read DOM은 전체를 업데이트 해야함
+                - **Virtual DOM은 1개만 업데이트 가능**
+        - 스냅샷을 찍어 바뀐 부분부분만을 확인 후 RealDOM에서 바꾸는 형식
 
-- 터미널에서 다음 명령어를 통해 노드설치 여부 확인
-    
-    ```bash
-    node -v
-    ```
-    
-- 버전이 없다고 가정하고 진행
-    
-    [Node.js](https://nodejs.org/en/)
-    
-    최신버전보다 검증이 된 LTS버전을 다운로드 후 설치
-    
-- 원하는 워크스페이스에서 boiler-plater 폴더 생성
-- 해당 워크스페이스로 이동 후  npm 패키지 생성
-    - 터미널에서 다음 명령어 사용 엔터를 쳐서 기본값으로 진행
-    
-    ```bash
-    npm init
-    ```
-    
-    - author은 자신의 이름을 입력 (안해도 됨)
-- **Express 설치**
-    - 워크스페이스 디렉토리에서 다음 명령어 입력
-        - —save 옵션을 주면 패키지에 의존성 추가
-        
-        ```bash
-        npm install express --save
-        ```
-        
-- **Index.js 생성 후 기본적인 샘플코드 작성**
-    - 
-    
-    [Express "Hello World" 예제](https://expressjs.com/ko/starter/hello-world.html)
-    
-    ```jsx
-    const express = require('express')
-    const app = express()
-    const port = 3000
-    
-    app.get('/', (req, res) => {
-      res.send('Hello World!')
-    })
-    
-    app.listen(port, () => {
-      console.log(`Example app listening on port ${port}`)
-    })
-    ```
-    
-- **package.json 파일 수정**
-    - "start": "node index.js" 코드 추가
-    
-    ```jsx
-    "scripts": {
-        "start": "node index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-      },
-    ```
-    
-- **Index.js 실행**
-    
-    ```bash
-    npm run start
-    ```
-    
-    - [localhost:3000](http://localhost:3000)을 주소창에 입력하여 확인
+**Create - React 설치하기**
 
-<img width="636" alt="스크린샷 2022-12-27 오후 6 25 50" src="https://user-images.githubusercontent.com/79856225/209817264-f65887ac-aa0b-451c-82bb-bc387ebb68f0.png">
+- 전체 흐름도
+    
+    ![스크린샷 2022-12-28 오후 10.33.06.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e416be30-4420-49ed-a43d-cdeb131c820b/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-12-28_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_10.33.06.png)
+    
+
+**프론트도 해야하므로 client, server 폴더 생성하여 분리**
+
+**server 폴더에 지금까지 했던 파일들 이동**
+
+- config 폴더
+- middleware 폴더
+- Models 폴더
+- index.js 파일
+
+**client 폴더로 이동 후 터미널에 다음 명령어 실행**
+
+```bash
+npx create-react-app .
+```
+
+**—# npm ? npx?**
+
+- npm (node package manager)
+    - 저장소 역할
+    - -g 플래그를 주면 글로벌로 다운로드
+        - 플래그를 주지 않으면 node-modules에 저장
+    - **원래는 글로벌로 create-react를 다운로드 했었음**
+- **npx를 이용하여 다운없이 저장소에 있는 리액트를 가져와서 사용가능**
+    - 저장공간 부담이 없음
+    - 항상 최신 버전 사용 가능
+
+**client 폴더로 이동하여 npm run start 입력**
+
+—# package.json 스크립트에 start 명령어가 등록되어 있음
+
+- node_modules
+    - 라이브러리 저장소
+- public
+    - static 파일들 보관함
+- src
+    - 소스코드 보관함 (실질적으로 여기파일들로 코딩함)
+- package.json
+    - 설치한 라이브러리 목록
+- **App.js**
+    - 렌더링된 페이지가 보여짐
 
 </div>
 </details>
 
-### #2 MongoDB 연결
+
+### #12 CRA to Our Boilerplate
 
 <details>
-<summary> MongoDB 연결 </summary>
+<summary> 12 CRA to Our Boilerplate </summary>
 <div markdown="1">
-**MongoDB 로그인**
 
-- 회원가입 후 로그인
+- **전체 흐름도**
     
-    [Cloud: MongoDB Cloud](https://cloud.mongodb.com/v2/620e6b7154ca89437ccd355f#/clusters)
+    <img width="240" alt="스크린샷 2022-12-28 오후 11 00 15" src="https://user-images.githubusercontent.com/79856225/210166354-2a6d4d9e-4813-4490-9f25-3af181cdbefc.png">
     
 
-**클러스터 생성**
+**src 하위 경로에 다음 폴더 및 파일 추가**
 
-1. **Shared 클러스터를 사용 (무료)**
+- **_actions 폴더 생성**
+- **_reducers 폴더 생성**
+- **components 폴더 생성**
+    - **views 폴더 생성**
+        - **LandingPage 폴더 생성 : 처음 페이지**
+            - **LandingPage.js 파일 생성 후 다음 코드 입력**
+            - **ES7 React 확장팩을 설치하면 rfce를 입력하여 기본 코드 자동완성 가능**
+                
+                <img width="1495" alt="스크린샷 2022-12-28 오후 11 17 37" src="https://user-images.githubusercontent.com/79856225/210166355-424954bc-99e3-41bf-9644-7bdf3929f4f0.png">
 
-<img width="795" alt="스크린샷 2022-12-27 오후 6 26 47" src="https://user-images.githubusercontent.com/79856225/209817272-1f919388-042c-4620-b66c-326ed195859c.png">
-
-<img width="791" alt="스크린샷 2022-12-27 오후 6 28 28" src="https://user-images.githubusercontent.com/79856225/209817273-ba397f01-33f6-4e31-a0e7-588647d7b793.png">
-
-1. 3개의 클라우드 중 원하는 클라우드 선택
-    
-    <img width="823" alt="스크린샷 2022-12-27 오후 6 31 05" src="https://user-images.githubusercontent.com/79856225/209817280-de0b6a2c-12f9-43fb-924f-3512431e56d1.png">
-    
-2. **지역 선택**
-    
-    <img width="800" alt="스크린샷 2022-12-27 오후 6 32 55" src="https://user-images.githubusercontent.com/79856225/209817283-89c14aa5-1f04-4778-8ba6-fc0466d9a3c4.png">
-    
-    1. **Tier와 Name 설정**
-        
-        <img width="653" alt="스크린샷 2022-12-27 오후 6 37 28" src="https://user-images.githubusercontent.com/79856225/209817285-ebe6fafb-fa81-4e04-b110-314c00b83104.png">
-        
-    2. **User 생성**
-        
-        이름과 비밀번호를 입력 후 생성
-        
-        <img width="627" alt="스크린샷 2022-12-27 오후 6 39 36" src="https://user-images.githubusercontent.com/79856225/209817288-a155e63a-9e37-406b-bf07-e2783f642f9a.png">
-        
-        자신의 IP를 등록 후 생성 
-        
-        <img width="366" alt="스크린샷 2022-12-27 오후 6 43 57" src="https://user-images.githubusercontent.com/79856225/209817292-21606112-f3e9-4cec-b9c0-29da1fd410c4.png">
-        
-    
-    **Mongoose 설치**
-    
-    몽고DB를 간단하게 쓸 수 있는 Object Modeling Tool
-    
-    ```bash
-    npm install mongoose --save
-    ```
-    
-    1. 몽고디비 커넥트 주소 복사
-        
-        <img width="622" alt="스크린샷 2022-12-27 오후 6 44 14" src="https://user-images.githubusercontent.com/79856225/209817294-83d7d37d-6593-4ccf-b6e5-31608330a46e.png">
-        
-        <img width="647" alt="스크린샷 2022-12-27 오후 6 44 36" src="https://user-images.githubusercontent.com/79856225/209817296-b5f5e8ca-cc5c-4c34-a2b8-5c42ade28f47.png">
-        
-        <img width="370" alt="스크린샷 2022-12-27 오후 6 55 40" src="https://user-images.githubusercontent.com/79856225/209817299-60cb6879-bb91-4096-af5d-639bd1401bb5.png">
-        
-    2. 몽구스를 이용하여 몽고DB 연결 
-        1. index.js파일 수정 
+                
+                ```jsx
+                //**LandingPage
+                import React from 'react'
+                
+                function LandingPage(){
+                    return (
+                        <div>
+                            LandingPage
+                        </div>
+                    )
+                }
+                export default LandingPage**
+                ```
+                
+        - **LoginPage 폴더 생성 : 로그인 페이지**
+            - **LoginPage.js 파일 생성 후 다음 코드 입력**
             
             ```jsx
-            const mongoose = require('mongoose')
-            mongoose.connect('mongodb+srv://유저아이디:유저비밀번호@junprojcet.kzx4jm1.mongodb.net/?retryWrites=true&w=majority',
-            {
-                useNewUrlParser: true, useUnifiedTopology: true 
-            }).then(() => console.log('Successfully connected to mongodb'))
-            .catch(e => console.error(e));
+            import React from 'react'
+            
+            function LoginPage() {
+              return (
+                <div>LoginPage</div>
+              )
+            }
+            
+            export default LoginPage
             ```
             
-        - connet 부분에 자신의 유저 이메일과 비밀번호를 넣어줘야 함
-        - 전체코드
+        - **RegisterPage 폴더 생성 : 회원가 입 페이지**
+            - **RegisterPage.js 파일 생성 후 다음 코드 입력**
             
             ```jsx
-            const express = require('express')
-            const app = express()
-            const port = 3000
+            import React from 'react'
             
-            const mongoose = require('mongoose')
-            mongoose.connect('mongodb+srv://유저아이디:유저비밀번호@junprojcet.kzx4jm1.mongodb.net/?retryWrites=true&w=majority',
-            {
-                useNewUrlParser: true, useUnifiedTopology: true 
-            }).then(() => console.log('Successfully connected to mongodb'))
-            .catch(e => console.error(e));
+            function RegisterPage() {
+              return (
+                <div>RegisterPage</div>
+              )
+            }
             
-            app.get('/', (req, res) => {
-              res.send('Hello World!')
-            })
-            
-            app.listen(port, () => {
-              console.log(`Example app listening on port ${port}`)
-            })
+            export default RegisterPage
             ```
             
-    3. npm run start 명령어를 이용하여 확인
-        
-        <img width="595" alt="스크린샷 2022-12-28 오후 8 28 19" src="https://user-images.githubusercontent.com/79856225/209817303-69d05598-6f06-489f-9050-462782141465.png">
+        - **NavBar 폴더 생성 : 네비게이션 바**
+            - **NavBar.js 파일 생성 후 다음 코드 입력**
+            
+            ```jsx
+            import React from 'react'
+            
+            function NavBar() {
+              return (
+                <div>NavBar</div>
+              )
+            }
+            
+            export default NavBar
+            ```
+            
+        - **Footer 폴더 생성 : 하단 정보**
+            - **Footer.js 파일 생성 후 다음 코드 입력**
+            
+            ```jsx
+            import React from 'react'
+            
+            export default function Footer() {
+              return (
+                <div>Footer</div>
+              )
+            }
+            ```
+            
+- **utils 폴더 생성**
+- **hoc 폴더 생성**
+- **Config.js 파일 생성**
+
 </div>
 </details>
 
-
-### #3 MonoDB model & Schema
-
+### # 13 React Router Dom
 
 <details>
-<summary> MonoDB model & Schema </summary>
+<summary> React Router Dom </summary>
 <div markdown="1">
 
-<img width="324" alt="스크린샷 2022-12-28 오후 8 29 36" src="https://user-images.githubusercontent.com/79856225/209817665-4dfbd0a4-d301-40c6-8515-47b09dd7cb62.png">
-
-**Model**
-
-- 스키마를 감싸주는 역할
-
-**Schema**
-
-- 하나하나의 정보들을 지정
-
-**Models 폴더 생성**
-
-- User.js 파일 생성 후 코드 입력
+- **전체 흐름도**
     
-    ```jsx
-    const mongoose = require('mongoose')
+    <img width="667" alt="스크린샷 2022-12-28 오후 11 21 58" src="https://user-images.githubusercontent.com/79856225/210166378-77af81fe-de50-4c5b-bbd2-89829d639358.png">
+
     
-    const userSchema = mongoose.Schema({
-        name:{
-            type : String,
-            maxlength : 50,
-        },
-        email:{
-            type : String,
-            trim : true, // space를 없애주는 역할
-            unique :1  // 똑같은 이메일 사용금지
-        },
-        password:{
-            type : String,
-            minlength :5,
-        },
-        lastname:{
-            type : String,
-            maxlength : 50,
-        },
-        role:{ //관리자 또는 일반이 설정 기본은 일반
-            type : Number,
-            default : 0
-        },
-        image: String,
-        token:{ //유효성 관리를 위한 토큰
-            type:String,
-        },
-        tokenExp:{ //토큰의 유효기간
-            type:Number,
-        },
-    })
-    
-    const User = mongoose.model('User', userSchema) //스키마를 모델로 감싸줌
-    module.exports = {User} //다른곳에서 사용할 수 있게 하기위해
-    ```
+
+**하나의 페이지에서 다음페이지로 넘어가기 위한 Router 설정**
+
+**React Router Dom 라이브러리 설치(clinet 폴더에서 입력해야 함)**
+
+```bash
+npm install react-router-dom --save
+```
+
+**App.js 파일 수정**
+
+- 메인 페이지
+- 로그인 페이지
+- 회원가입 페이지
+
+```jsx
+import React from 'react';
+
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Link
+}from "react-router-dom";
+
+import LandingPage from './components/views/LandingPage/LandingPage'
+import LoginPage from './components/views/LoginPage/LoginPage'
+import RegisterPage from './components/views/RegisterPage/RegisterPage'
+
+function App(){
+	return (
+		<Router>
+			<div>
+				{
+					}
+				<Switch>
+					<Route exact path="/" component ={LandingPage} />
+					<Route exact  path="/login " component = {LoginPage} />
+					<Route exact  path="/register " component = {RegisterPage } />
+				</Switch>
+			</div>
+		</Router>		
+	);
+}
+
+export default App;
+```
 
 </div>
 </details>
 
 
+### # 14 데이터 Flow & Axios
+
+<details>
+<summary> 데이터 Flow & Axios </summary>
+<div markdown="1">
+
+
+
+</div>
+</details>
 
 <!--
 <details>
