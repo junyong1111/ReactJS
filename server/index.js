@@ -3,10 +3,10 @@ const app = express();
 const port = 3000
 
 const mongoose = require('mongoose');
-const {User} = require("./server/Models/User");// 미리 정의했던 모델 가져오기
-const {auth} = require("./server/middleware/auth");// 미리 정의했던 모델 가져오기
+const {User} = require("./Models/User");// 미리 정의했던 모델 가져오기
+const {auth} = require("./middleware/auth");// 미리 정의했던 모델 가져오기
 const bodyParser = require('body-parser');
-const config = require("./server/config/key");
+const config = require("./config/key");
 const e = require('express');
 const cookieParser = require('cookie-parser');
 
