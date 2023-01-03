@@ -82,7 +82,7 @@ npx create-react-app .
 ### #12 CRA to Our Boilerplate
 
 <details>
-<summary> 12 CRA to Our Boilerplate </summary>
+<summary> CRA to Our Boilerplate </summary>
 <div markdown="1">
 
 - **전체 흐름도**
@@ -182,7 +182,7 @@ npx create-react-app .
 </div>
 </details>
 
-### # 13 React Router Dom
+### #13 React Router Dom
 
 <details>
 <summary> React Router Dom </summary>
@@ -251,10 +251,332 @@ export default App;
 <summary> 데이터 Flow & Axios </summary>
 <div markdown="1">
 
+- **전체 흐름도**
+    
+    <img width="527" alt="스크린샷 2022-12-29 오후 11 14 40" src="https://user-images.githubusercontent.com/79856225/210306985-83c18785-ef6b-4e27-a42b-f4b8b76130db.png">
 
+    
+
+**NodeJs → Server**
+
+**ReactJs → Clinet**
+
+**MongoDB → DB**
+
+**유저가 로그인(클라이언트) → 서버에서 데이터베이스 접근 → 일치여부 확인 → 유저에게 보여줌**
+
+**이제 클라이언트가 있으니 POSTMAN이 아닌 Axios 라이브러리 를 이용**
+
+- **Axios 라이브러리 다운로드**
+    - client 폴더로 이동 후 다음 명령어 입력
+    
+    ```bash
+    npm install axios --save
+    ```
+    
+- **LandingPage.js 파일 코드 추가(클라이언트)**
+    
+    ```jsx
+    import React, {useEffect} from 'react'
+    import axios from 'axios'
+    import { response } from 'express'
+    
+    function LandingPage(){
+    
+        useEffect(()=>{
+            axios.get('/api/hello')
+            .then(response => console.log(response.data))
+        }, [])
+    
+        return (
+            <div>
+                LandingPage
+            </div>
+        )
+    }
+    export default LandingPage
+    ```
+    
+- **index.js 파일 코드 추가(서버)**
+    
+    ```jsx
+    app.get('/api/hello', (req,res) =>{
+    
+      res.send("안녕하세요")
+    })
+    ```
+    
+- **2개의 터미널을 이용하여 server와 client 서버 실행**
+    - server 디렉토리에서 npm run start
+    - client 디렉토리에서 npm run start
+    
+    **확인하면 에러가 뜬다 이유는 서로의 포트번호가 달라서임  따로 설정필요**
 
 </div>
 </details>
+
+
+### # 15 CORS 이슈, Proxy 설정
+
+<details>
+<summary> CORS 이슈, Proxy 설정 </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="465" alt="스크린샷 2022-12-29 오후 11 31 20" src="https://user-images.githubusercontent.com/79856225/210307349-94687fdf-2575-4fc1-af13-12b176cdf37e.png">
+    
+
+**서로의 서버 포트번호가 달라서 에러가 발생**
+
+**CORS 정책이란 ?**
+
+- **Cross  Origin  Resource Sharing**
+    
+    **서로 다른 웹사이트에서 다른 도메인끼리 소통하려면 제한이 걸림**
+    
+- **다양한 해결방법이 존재**
+    - **Proxy 설정으로 해결**
+
+**Proxy 설정**
+
+- **다음 명령어로 Proxy 라이브러리 다운로드(clinet 폴더)**
+    
+    ```bash
+    npm install http-proxy-middleware --save
+    ```
+    
+- **src/setupProxy.js 파일 생성 후 다음 코드 추가**
+    - **target 포트번호는 자신의 포트번호와 맞춰야 함**
+    - **기존 서버 3000 포트번호에서 포트번호를 5050으로 바꿨음**
+    
+    ```jsx
+    const { createProxyMiddleware } = require('http-proxy-middleware');
+    
+    module.exports = function(app) {
+      app.use(
+        '/api',
+        createProxyMiddleware({
+          target: 'http://localhost:5050',
+          changeOrigin: true,
+        })
+      );
+    };
+    ```
+    
+- **2개의 터미널을 이용하여 server와 client 서버 실행**
+    - server 디렉토리에서 npm run start
+    - client 디렉토리에서 npm run start
+    
+    —# 다음과 같은 에러발생 시
+    
+    ```bash
+    Compiled with problems:X
+    
+    ERROR in ./node_modules/body-parser/lib/read.js 19:11-26
+    
+    Module not found: Error: Can't resolve 'zlib' in '/Users/dak_kiwon/Jun/boiler-plater/clinet/node_modules/body-parser/lib'
+    ```
+    
+    <img width="1004" alt="스크린샷 2022-12-29 오후 11 49 30" src="https://user-images.githubusercontent.com/79856225/210307355-a1426628-3268-461c-84f7-9ee677723b12.png">
+    
+    <img width="632" alt="스크린샷 2022-12-29 오후 11 49 54" src="https://user-images.githubusercontent.com/79856225/210307357-12e15e5b-8c59-41ad-9214-ff0980a6bef1.png">
+
+    
+    **해당 오류가 나는 페이지에서 express 부분을 삭제하면 정상작동 한다!**
+
+</div>
+</details>
+
+
+### # 16 Proxy Sever란?
+
+
+<details>
+<summary> Proxy Sever란? </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="596" alt="스크린샷 2022-12-29 오후 11 52 43" src="https://user-images.githubusercontent.com/79856225/210307746-4ecb806a-43c3-4dc7-ba81-5a1b23f93377.png">
+
+    
+
+**Proxy Sever의 기능**
+
+1. **유저가 보낸 IP를 임의로 바꿀 수 있음**
+2. **방화벽 기능**
+3. **웹 필터 기능**
+4. **캐쉬 데이터 제공**
+
+**Proxy Sever의 사용 이유**
+
+1. 회사나 직원들 집안에서 아이들 인터넷 사용 제어
+    1. 특정 사이트 제한
+2. 캐쉬를 이용하여 더 빠른 인터넷 이용 제공
+    1. 미리 캐쉬에 자료를 보관하여 빠르게 처리가능
+3. 더 나은 보안 제공
+    1. 아이피를 가릴 수 있음
+4. 이용 제한된 사이트 접근 가능
+
+</div>
+</details>
+
+
+### # 17 Concurrently
+
+<details>
+<summary> Concurrently </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="663" alt="스크린샷 2022-12-30 오전 12 02 39" src="https://user-images.githubusercontent.com/79856225/210307917-4052e8ca-2986-41d6-bbee-53c08eee881b.png">
+
+    
+
+**Concurrently를 이용하여 프론트와 백 서버를 한 번에 켤 수있다.**
+
+**Concurrently 라이브러리 설치 (workspace 폴더)**
+
+```bash
+npm install concurrently --save
+```
+
+**Workspace 폴더에  package.json 스크립트를 수정**
+
+```jsx
+"dev" : "concurrently \"npm run backend\" \"npm run start --prefix clinet\"" 
+```
+
+**전체 코드**
+
+- **index.js 파일이 server 폴더로 옮겨졌으므로 그 경로에 맞게 Main경로를 수정**
+
+```jsx
+{
+  "name": "boiler-plater",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server/index.js",
+  "scripts": {
+    "start": "node index.js",
+    "backend": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "concurrently \"npm run backend\" \"npm run start --prefix clinet\"" 
+  },
+  "author": "Jun",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "concurrently": "^7.6.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
+```
+
+**npm run dev 명령어 실행 후 확인**
+
+</div>
+</details>
+
+
+### # 18 Antd CSS Framwrok
+
+<details>
+<summary> Antd CSS Framwrok </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="496" alt="스크린샷 2022-12-30 오전 12 16 27" src="https://user-images.githubusercontent.com/79856225/210308152-38a0925b-0774-486b-875e-126d608e86ef.png">
+
+    
+
+리액트에서 가장 유명한 프레임워크종류 중 **Ant Design 사용**
+
+1. Material UI
+2. React Bootstrap
+3. Semantic UI
+4. **Ant Design** 
+5. Materialize
+
+[https://ant.design/](https://ant.design/)
+
+**Ant Design**
+
+- 사이즈가 큼
+- 사용이 편리하고 디자인이 깔끔함
+- 배울 때 어려움
+
+**Ant Design 설치 (client 폴더에서 설치)**
+
+```bash
+npm install antd --save
+```
+
+**clinet/src/index.js 파일에 다음 코드 추가**
+
+```jsx
+import 'antd/dist/antd.css';
+```
+
+</div>
+</details>
+
+### # 19 Redux 기초
+
+<details>
+<summary> Redux 기초 </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="416" alt="스크린샷 2022-12-30 오전 12 22 58" src="https://user-images.githubusercontent.com/79856225/210308329-d0a83354-94e7-4ae7-80e8-6444598c2e11.png">
+    
+
+### **Redux → 상태 관리 라이브러리**
+
+**Props Vs State**
+
+**Props**
+
+- properties의 줄임말
+- 컴포넌트간의 무언가를 주고받을 때는 props을 이용
+- 부모 → 자식 으로만 보낼 수 있음
+- 부모 → 자식으로 보낸 값은 바뀔 수 없다.
+    - 바꾸려면 부모 → 자식으로 새로운 값을 다시 보내야 함
+
+**State**
+
+- 컴포넌트안에서 데이터를 주고받을 때는 state이용
+- 컴포넌트안에서의 값들은 변할 수 있다.
+- 새로운값으로 변할 시 리렌더링된다.
+
+**Redux**
+
+<img width="409" alt="스크린샷 2022-12-30 오전 12 29 52" src="https://user-images.githubusercontent.com/79856225/210308334-38800bf6-77e9-4212-970f-71b504be8ac9.png">
+
+- Store를 이용하여 컴포넌트 변화를 직접 접근할 수 있음
+- 한뱡항으로만 흐름
+- Action
+    - 무엇이 일었났는지 설명하는 객체
+- Reducer
+    - 이전 State과 action object를 받은 후에 변해진 state를 반환한다.
+- Store
+    - 애플리케이션의 state을 감싸줌
+    - 여러가지 함수(메소드)가 존재
+
+</div>
+</details>
+
 
 <!--
 <details>
