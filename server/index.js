@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000
+const port = 8080
 
 const mongoose = require('mongoose');
 const {User} = require("./Models/User");// 미리 정의했던 모델 가져오기

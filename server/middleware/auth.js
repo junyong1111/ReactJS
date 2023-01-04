@@ -19,8 +19,6 @@ let auth = (req, res, netx) =>{
         req.user = user
         netx(); //미들웨어에서 다음으로 갈 수 있게
     })
-   
-
 }
 
 module.exports = {auth};
