@@ -10,7 +10,6 @@ const config = require("./config/key");
 const e = require('express');
 const cookieParser = require('cookie-parser');
 
-
 // 데이터 분석을 위한 추가 설정
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));  
@@ -76,7 +75,7 @@ app.post('/api/users/login', (req, res) =>
 app.get('/api/users/auth', auth, (req, res) =>{
   // 여기까지 왔다면 auth가 true라는 뜻
   res.status(200).json({
-    _id : req.usrt._id,
+    _id : req.user._id,
     isAdimn : req.user.role ===0 ? false : true,
     isAuth : true,
     email : req.user.email,
