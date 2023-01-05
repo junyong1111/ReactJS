@@ -54,20 +54,20 @@ userSchema.pre('save', function(next){
     }
 })
 
-userSchema.methods.comparePassword = function(plainPassword,callbackfunc)
+userSchema.methods.comparePassword = function(plainPassword,callbackfunk)
 {
     // plainPassword = 1234
     // database 암호 = 암호화된 비밀번호 
 
     bcrypt.compare(plainPassword, this.password, function(err, isMatch){
         if(err){
-            return callbackfunc(err);
+            return callbackfunk(err);
         }
         else
-            callbackfunc(null, isMatch);
+            callbackfunk(null, isMatch);
     })
 }
-userSchema.methods.generateToken = function(callbackfunc){
+userSchema.methods.generateToken = function(callbackfunk){
     //jsonwebtoken을 이용하여 토큰 생성
     var user = this;
     var token = jwt.sign(user._id.toHexString(), 'secretToken')
@@ -75,10 +75,11 @@ userSchema.methods.generateToken = function(callbackfunc){
     // user.id + secretToken 을 이용하여 토큰을 생성하고 나중에 secretToken을 이용하여 user.id 확인 가능
     user.token = token
     user.save(function(err, user){
-        if(err) return callbackfunc(err)
-        callbackfunc(null, user)
+        if(err) return callbackfunk(err)
+        callbackfunk(null, user)
     })
 }
+
 userSchema.statics.findByToken = function(token, callbackfunc){
     var user = this;
     // 토큰을 가져와서 복호화 -> 디코드

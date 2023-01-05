@@ -819,7 +819,7 @@ import 'antd/dist/antd.css';
 </div>
 </details>
 
-### # 22 로그인 페이지 만들기(2)
+### # 23 로그인 페이지 만들기(2)
 
 <details>
 <summary> 로그인 페이지 만들기(2) </summary>
@@ -959,6 +959,592 @@ import 'antd/dist/antd.css';
 
 </div>
 </details>
+
+### # 24 회원 가입 페이지
+
+<details>
+<summary> 회원 가입 페이지 </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="874" alt="스크린샷 2023-01-05 오후 2 57 07" src="https://user-images.githubusercontent.com/79856225/210741906-3a6223c5-4c33-4625-8d14-ef96016aea1d.png">
+
+    
+
+- **clinet/src/components/views/RegisterPage/RegisterPage.js 파일 수정**
+    
+    ```jsx
+    import React, { useState } from 'react'
+    import {useDispatch} from 'react-redux'
+    import { loginUser } from '../../../_actions/user_action'
+    
+    function RegisterPage(props) {
+      const dispatch = useDispatch();
+      
+      const [Email, setEmail] = useState("")
+      const [Name, setName] = useState("")
+      const [Password, setPassword] = useState("")
+      const [ConfirmPassword, setConfirmPassword] = useState("")
+    
+      const onEmailHandler = (event) => {
+        setEmail(event.currentTarget.value)
+      }
+      const onNameHandler = (event) => {
+        setName(event.currentTarget.value)
+      }
+      const onPasswordHandler = (event) => {
+        setPassword(event.currentTarget.value)
+      }
+      const onConfirmPasswordHandler = (event) => {
+        setConfirmPassword(event.currentTarget.value)
+      }
+    
+      const onSubmitHandler = (event) => {
+        event.preventDefault(); 
+    
+        console.log('Email', Email)
+        console.log('PW', Password)
+    
+        let body = {
+          email : Email,
+          password : Password
+        }
+    
+        dispatch(loginUser(body))
+        .then(response=>{
+          if(response.payload.loginSuccess){
+            props.history.push('/')//메인페이지로 이동
+          }
+          else{
+            alert('Error')
+          }
+        })
+      }
+      return (
+        <div style ={{
+          display: 'flex', justifyContent: 'center', alignItems:'center'
+          , width: '100%', height: '100vh'
+    
+      }}>
+          <form style = {{display :'flex', flexDirection : 'column'}}
+          onSubmit = {onSubmitHandler}>
+            
+            <label>Email</label>
+            <input type = "email" value= {Email} onChange ={onEmailHandler} />
+            
+            <label>Name</label>
+            <input type = "name" value = {Name} onChange = {onNameHandler} />
+            
+            <label>Password</label>
+            <input type = "password" value = {Password} onChange = {onPasswordHandler} />
+            
+            <label>Confirm Password</label>
+            <input type = "password" value = {ConfirmPassword} onChange = {onConfirmPasswordHandler} />
+    
+            <br />
+            <button>
+              회원가입
+            </button>
+    
+          </form>
+      </div>
+      )
+    }
+    
+    export default RegisterPage
+    ```
+    
+    - 기존 Login 페이지에서 이름과 비밀번호 확인란 추가
+        
+        ```
+        const [Name, setName] = useState("")
+        
+        const onNameHandler = (event) => {
+            setName(event.currentTarget.value)
+          }
+        ```
+        
+        ```
+        const [ConfirmPassword, setConfirmPassword] = useState("")
+        
+        const onConfirmPasswordHandler = (event) => {
+            setConfirmPassword(event.currentTarget.value)
+          }
+        ```
+        
+- **회원가입 버튼을 누르면 회원가입을 할 수 있게 액션 날리기**
+- **clinet/src/_actions 폴더 파일 수정**
+    - **types.js 파일 타입 추가**
+        
+        ```jsx
+        export const REGISTER_USER = "register_user”
+        ```
+        
+    - **user_action.js 파일 액션 추가**
+        
+        ```
+        
+        import {
+            LOGIN_USER,
+            REGISTER_USER
+        }from './types';
+        // 등록한 REGISTER타입 import
+        
+        export function registerUser(dataTosubmit){
+            const request = Axios.post('/api/users/register', dataTosubmit)
+            .then(response =>response.data)
+        
+            return {
+                type: REGISTER_USER,
+                payload : request
+            }
+        }
+        ```
+        
+        - 전체코드(user_action.js)
+            
+            ```jsx
+            import Axios from 'axios'
+            import {
+                LOGIN_USER,
+                REGISTER_USER
+            }from './types';
+            
+            export function loginUser(dataTosubmit){
+                const request = Axios.post('/api/users/login', dataTosubmit)
+                .then(response =>response.data)
+            
+                return {
+                    type: LOGIN_USER,
+                    payload : request
+                }
+            }
+            
+            export function registerUser(dataTosubmit){
+                const request = Axios.post('/api/users/register', dataTosubmit)
+                .then(response =>response.data)
+            
+                return {
+                    type: REGISTER_USER,
+                    payload : request
+                }
+            }
+            ```
+            
+- **clinet/src/_reducers 폴더 파일 수정**
+    - user_reducer.js
+        
+        ```jsx
+        import {
+            LOGIN_USER,
+            REGISTER_USER
+        }from '../_actions/types';
+        
+        export default function(state={}, action){
+            switch(action.type){
+                case LOGIN_USER:
+                    return {...state, loginSuccess: action.payload}
+                case REGISTER_USER:
+                    return {...state, register: action.payload}
+                default :
+                    return state;
+                    
+            }
+        }
+        ```
+        
+- **Register.js 파일 수정**
+- **회원가입 버튼 클릭 시 액션 코드 추가**
+    
+    ```jsx
+    const onSubmitHandler = (event) => {
+        event.preventDefault(); 
+    
+        if(Password !== ConfirmPassword){
+          return alert("비밀번호와 비밀번화 확인은 같아야 합니다.")
+        }
+    
+        let body = {
+          email : Email,
+          password : Password,
+          name : Name
+        }
+    
+        dispatch(registerUser(body))
+        .then(response=>{
+          if(response.payload.success){
+            props.history.push('/login')// 로그인페이지로 이동
+          }
+          else{
+            alert('회원가입에 실패하였습니다.')
+          }
+        })
+      }
+    ```
+    
+    - 만약 비밀번호와 비밀번호 확인이 다르면 오류 알람창
+    - 회원가입에 성공하면 로그인 페이지로 이동
+    - 실패하면 경고 창
+    - 전체 코드
+        
+        ```jsx
+        import React, { useState } from 'react'
+        import {useDispatch} from 'react-redux'
+        import { useNavigate } from 'react-router-dom';
+        import { registerUser } from '../../../_actions/user_action';
+        
+        function RegisterPage(props) {
+          const dispatch = useDispatch();
+          const navigate = useNavigate();
+          
+          const [Email, setEmail] = useState("")
+          const [Name, setName] = useState("")
+          const [Password, setPassword] = useState("")
+          const [ConfirmPassword, setConfirmPassword] = useState("")
+        
+          const onEmailHandler = (event) => {
+            setEmail(event.currentTarget.value)
+          }
+          const onNameHandler = (event) => {
+            setName(event.currentTarget.value)
+          }
+          const onPasswordHandler = (event) => {
+            setPassword(event.currentTarget.value)
+          }
+          const onConfirmPasswordHandler = (event) => {
+            setConfirmPassword(event.currentTarget.value)
+          }
+        
+          const onSubmitHandler = (event) => {
+            event.preventDefault(); 
+        
+            if(Password !== ConfirmPassword){
+              return alert("비밀번호와 비밀번화 확인은 같아야 합니다.")
+            }
+        
+            let body = {
+              email : Email,
+              password : Password,
+              name : Name
+            }
+        
+            dispatch(registerUser(body))
+            .then(response=>{
+              if(response.payload.success){
+                alert('회원가입에 성공하였습니다.')
+                // props.history.push("/")// 로그인페이지로 이동
+                navigate('/login')
+              }
+              else{
+                alert('회원가입에 실패하였습니다.')
+              }
+            })
+          }
+          return (
+            <div style ={{
+              display: 'flex', justifyContent: 'center', alignItems:'center'
+              , width: '100%', height: '100vh'
+        
+          }}>
+              <form style = {{display :'flex', flexDirection : 'column'}}
+              onSubmit = {onSubmitHandler}>
+                
+                <label>Email</label>
+                <input type = "email" value= {Email} onChange ={onEmailHandler} />
+                
+                <label>Name</label>
+                <input type = "name" value = {Name} onChange = {onNameHandler} />
+                
+                <label>Password</label>
+                <input type = "password" value = {Password} onChange = {onPasswordHandler} />
+                
+                <label>Confirm Password</label>
+                <input type = "password" value = {ConfirmPassword} onChange = {onConfirmPasswordHandler} />
+        
+                <br />
+                <button>
+                  회원가입
+                </button>
+        
+              </form>
+          </div>
+          )
+        }
+        
+        export default RegisterPage
+        ```
+
+</div>
+</details>
+
+### # 25 로그아웃 
+
+<details>
+<summary> 로그아웃  </summary>
+<div markdown="1">
+
+**따로 페이지를 만드는게 아닌 메인페이지에서 로그아웃 버튼 생성**
+
+- **clinet/src/components/views/LandingPage/LandingPage.js 파일 수정**
+- 로그아웃 버튼 추가
+- 버튼 이벤트 추가
+    - 버튼 클릭시 리덕스가 아닌 axios를 이용하여 로그아웃 요청
+    
+    ```jsx
+    import React, {useEffect} from 'react'
+    import axios from 'axios'
+    import { useNavigate } from 'react-router-dom';
+    
+    function LandingPage(){
+    
+        useEffect(() => {
+            axios.get('/api/hello')
+            .then(response => console.log(response))
+          },[]);
+    
+        const navigate = useNavigate();
+        const onClickHandler = () =>{
+            axios.get('/api/users/logout')
+            .then(response=>{
+                if(response.data.success){
+                    navigate('/login')
+                }
+                else{
+                    alert("로그아웃에 실패했습니다.")
+                }
+            })
+        }
+    
+        return (
+            <div style ={{
+    						display: 'flex', justifyContent: 'center', alignItems:'center'
+    						, width: '100%', height: '100vh'
+    			
+    				}}>
+                <h2>시작 페이지</h2>
+                <button onClick={onClickHandler}>
+                로그아웃
+                </button>
+            </div>
+        )
+    }
+    export default LandingPage
+    ```
+
+</div>
+</details>
+
+### # 26 인증 체크
+
+<details>
+<summary> 인증 체크 </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="561" alt="스크린샷 2023-01-05 오후 4 20 21" src="https://user-images.githubusercontent.com/79856225/210742139-55ea41c7-0fcc-4e36-8737-0d38a464c83e.png">
+    
+
+**페이지별 인증이 필요함**
+
+- **회원만 이용가능한 기능**
+    - 댓글 작성
+    - 로그아웃
+- **비회원만 이용가능한 기능**
+    - 회원가입
+    - 로그인
+- **관리지만 이용가능한 기능**
+    - 게시판 관리 등등..
+
+### HOC(HigherOrderComponent)
+
+- **다음 컴포넌트를 받아서 새로운 컴포너트를 반환해주는 Function**
+
+**App.js에 3개의 페이지가 존재**
+
+- LandingPage(메인 페이지)
+- LoginPage(로그인 페이지)
+- RegisterPage(회원가입 페이지)
+
+**Auth(HOC)에 LandingPage를 넣으면 → HOC는 Backend로 Request요청을 보냄** 
+
+**→ 요청을 받은 Backend가 현재 페이지에 있는 유저의 상태정보를 반환해줌**
+
+—# 상태는 로그인 여부, 관리자 여부 등등…
+
+- **hoc/auth.js 파일 생성 후 다음 코드 추가**
+    
+    ```jsx
+    import React, { useEffect } from "react";
+    import { useDispatch } from "react-redux";
+    import { auth } from "../_actions/user_action";
+    import { useNavigate } from "react-router-dom";
+    
+    function Auth(SpecificComponent, option, adminRoute = null) {
+      function AuthenticationCheck(props) {
+        const dispatch = useDispatch();
+        const navigate = useNavigate();
+    
+        useEffect(() => {
+          dispatch(auth()).then((response) => {
+            console.log(response);
+            // 로그인 하지 않은 상태
+            if (!response.payload.isAuth) {
+              if (option) {
+                navigate("/login");
+              }
+            } else {
+              // 로그인 한 상태
+              if (adminRoute && !response.payload.isAdmin) {
+                alert("이미 회원가입을 했습니다.")
+                navigate("/");
+              } else {
+                if (!option) {
+                    alert("이미 로그인을 했습니다.")
+                    navigate("/");
+                }
+              }
+            }
+          });
+        }, []);
+    
+        return <SpecificComponent />;
+      }
+      return AuthenticationCheck;
+    }
+    
+    export default Auth;
+    ```
+    
+- **_actions 폴더 파일 수정**
+    - **types.js 코드 추가**
+        
+        ```jsx
+        export const AUTH_USER = "auth_user"
+        ```
+        
+    - **user_action.js 코드 추가**
+        
+        ```jsx
+        import Axios from 'axios'
+        import {
+            LOGIN_USER,
+            REGISTER_USER,
+            AUTH_USER,
+        }from './types';
+        
+        export function loginUser(dataTosubmit){
+            const request = Axios.post('/api/users/login', dataTosubmit)
+            .then(response =>response.data)
+        
+            return {
+                type: LOGIN_USER,
+                payload : request
+            }
+        }
+        
+        export function registerUser(dataTosubmit){
+            const request = Axios.post('/api/users/register', dataTosubmit)
+            .then(response =>response.data)
+        
+            return {
+                type: REGISTER_USER,
+                payload : request
+            }
+        }
+        
+        export function auth(){
+            const request = Axios.get('/api/users/auth')
+            .then(response =>response.data)
+        
+            return {
+                type: AUTH_USER,
+                payload : request
+            }
+        }
+        ```
+        
+- **_reducers 폴더 파일 수정**
+    - **user_reducer.js 코드 추가**
+        
+        ```
+        import {
+            LOGIN_USER,
+            REGISTER_USER,
+            AUTH_USER,
+        }from '../_actions/types';
+        
+        export default function(state={}, action){
+            switch(action.type){
+                case LOGIN_USER:
+                    return {...state, loginSuccess: action.payload}
+                case REGISTER_USER:
+                    return {...state, register: action.payload}
+                case AUTH_USER:
+                    return {...state, userIndo : action.payload}
+                default :
+                    return state;
+                    
+            }
+        }
+        ```
+        
+- **App.js 코드 추가**
+    
+    ```jsx
+    import React from 'react';
+    
+    import {
+    	BrowserRouter as Router,
+      Routes,
+    	Route,
+    }from "react-router-dom";
+    
+    import LandingPage from './components/views/LandingPage/LandingPage'
+    import LoginPage from './components/views/LoginPage/LoginPage'
+    import RegisterPage from './components/views/RegisterPage/RegisterPage'
+    import Auth from "./hoc/auth";
+    
+    function App(){
+    	const AuthLandingPage = Auth(LandingPage, null);
+    	const AuthLoginPage = Auth(LoginPage, false);
+    	const AuthRegisterPage = Auth(RegisterPage, false);
+    
+    	return (
+    		<Router>
+    				<Routes>
+    					<Route path="/" exact ={true} element ={<AuthLandingPage />} />
+    					<Route path="/login" element = {<AuthLoginPage />} />
+    					<Route path="/register" element = {<AuthRegisterPage />} />
+    				</Routes>
+    		</Router>		
+    	);
+    }
+    
+    export default App;
+    ```
+    
+    - 모든 페이즈를 Auth(HOC)로 감사줘야 함
+        
+        ```jsx
+         // null -> 아무나 출입이 가능한 페이지
+         // true -> 로그인한 유저만 출입이 가능한 페이지
+         // false -> 로그인한 유저는 출입이 불가능한 페이지
+        ```
+        
+
+### **확인**
+
+- 로그인을 한 후 다시 로그인 페이지 접속시 이미 로그인을 했다는 경고를 볼 수 있다.
+    
+    <img width="443" alt="스크린샷 2023-01-05 오후 5 58 57" src="https://user-images.githubusercontent.com/79856225/210742152-f646a089-054c-4c10-9bc3-738b2db5953a.png">
+
+
+</div>
+</details>
+
+
 <!--
 <details>
 <summary>  </summary>

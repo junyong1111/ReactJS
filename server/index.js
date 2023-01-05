@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
-const port = 3000
+const port = 8080
 
 const mongoose = require('mongoose');
-const {User} = require("./server/Models/User");// 미리 정의했던 모델 가져오기
-const {auth} = require("./server/middleware/auth");// 미리 정의했던 모델 가져오기
+const {User} = require("./Models/User");// 미리 정의했던 모델 가져오기
+const {auth} = require("./middleware/auth");// 미리 정의했던 모델 가져오기
 const bodyParser = require('body-parser');
-const config = require("./server/config/key");
+const config = require("./config/key");
 const e = require('express');
 const cookieParser = require('cookie-parser');
 
@@ -76,7 +76,7 @@ app.post('/api/users/login', (req, res) =>
 app.get('/api/users/auth', auth, (req, res) =>{
   // 여기까지 왔다면 auth가 true라는 뜻
   res.status(200).json({
-    _id : req.usrt._id,
+    _id : req.user._id,
     isAdimn : req.user.role ===0 ? false : true,
     isAuth : true,
     email : req.user.email,
