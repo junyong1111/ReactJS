@@ -578,6 +578,387 @@ import 'antd/dist/antd.css';
 </details>
 
 
+### # 20 Redux UP
+
+<details>
+<summary> Redux UP </summary>
+<div markdown="1">
+
+- **전체흐름도**
+    
+    <img width="674" alt="스크린샷 2023-01-03 오후 3 24 58" src="https://user-images.githubusercontent.com/79856225/210709079-1fb74246-7e4d-4fd3-951f-d1bd86ed51fe.png">
+
+    
+
+**4개의 의존성 설치**
+
+- **Clinet 디렉토리에서 터미널에서 다음 명령어 실행**
+    
+    ```bash
+    npm install redux react-redux redux-promise redux-thunk --save
+    ```
+    
+
+**Redux는 Store안에서 상태를 관리 함**
+
+- 항상 객체형식의 액션만 받는 것은 아님
+    - Promise 또는 Function으로 받을 수 있음
+
+**Redux를 더 잘 사용할 수 있게 도와주는 미들웨어**
+
+- **Redux-promise**
+    - Dispatch한테 Promise가 왔을 때 어떻게 대처해야하는지 알려줌
+- **Redux - thunk**
+    - 어떻게 Function 받을지를 Dispatch한테 알려줌
+
+### **Redux를 앱에다가 연결**
+
+- 구글 크롬 확장 [Redux Dev Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ko-KR) 다운로드 및 연결
+    
+    [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=ko-KR)
+    
+    ```jsx
+    window.__REDUX_DEVTOOLS_EXTENSION__&&
+    window.__REDUX_DEVTOOLS_EXTENSION__()
+    ```
+    
+- clinet/src/index.js 파일 수정
+    
+    ```jsx
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+    import App from './App';
+    import reportWebVitals from './reportWebVitals';
+    import { Provider } from 'react-redux';
+    import {applyMiddleware} from 'redux';
+    import {legacy_createStore as createStore} from 'redux';
+    import promiseMiddleware from 'redux-promise';
+    import ReduxThunk from 'redux-thunk';
+    import Reducer from './_reducers';
+    
+    const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore)
+    
+    ReactDOM.render(
+      <Provider
+        store={createStoreWithMiddleware(Reducer,
+          window.__REDUX_DEVTOOLS_EXTENSION__ &&
+          window.__REDUX_DEVTOOLS_EXTENSION__())}
+      >
+        <App />
+      </Provider>
+        
+      //</React.StrictMode>,
+      , document.getElementById('root'));
+    
+    reportWebVitals();
+    ```
+    
+- **clinet/src/_reducers/index.js 파일 생성 후 다음 코드 입력**
+    
+    ```jsx
+    import { combineReducers} from 'redux';
+    
+    const rootReducer = combineReducers({
+    	//user
+    })
+    
+    export default rootReducer ;
+    ```
+
+</div>
+</details>
+
+
+### # 21 React Hooks
+
+<details>
+<summary> React Hooks </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="359" alt="스크린샷 2023-01-03 오후 4 02 47" src="https://user-images.githubusercontent.com/79856225/210709252-6f6ada20-d5f6-448c-b2c6-ade4c358b4ff.png">
+    
+
+### React vs React Hooks
+
+**React Componet** 
+
+| Class Component | Functional Component |
+| --- | --- |
+| Provide more features | Provide less features |
+| Longer Code | Shorter Code |
+| More Complex Code | Simpler Code |
+| Slower Performance | Faster Performance |
+
+<img width="676" alt="스크린샷 2023-01-03 오후 4 09 28" src="https://user-images.githubusercontent.com/79856225/210709265-97a6b509-498a-4eba-b27e-625d4782b8a2.png">
+
+**—# 기존 리액트에서는 Functional Component는 빠르고 간단하지만 다양한 기능이 없어서 사용하지 못하는 경우가 많았는데 이를 해결하고자 React 16.8 버전부터 Hooks이라는 기능을 업데이트 했다.** 
+
+<img width="515" alt="스크린샷 2023-01-03 오후 4 11 23" src="https://user-images.githubusercontent.com/79856225/210709276-0d5daf13-aee1-414c-8182-68ee6253dd55.png">
+
+            (Class Component)                                              (Functional Component)
+
+</div>
+</details>
+
+### # 22 로그인 페이지 만들기(1)
+
+<details>
+<summary> 로그인 페이지 만들기(1) </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="682" alt="스크린샷 2023-01-03 오후 4 13 00" src="https://user-images.githubusercontent.com/79856225/210709498-c7e4ab86-8e88-4cce-88f6-a97f68af861c.png">
+
+    
+- **작업폴더에서 npm run dev 명령어 실행**
+- **clinet/src/components/views/LandingPage/LandingPage.js 파일 코드 수정**
+    
+    ```jsx
+    import React, {useEffect} from 'react'
+    import axios from 'axios'
+    
+    function LandingPage(){
+        useEffect(() => {
+            axios.get('/api/hello')
+            .then(response => console.log(response))
+          },[]);
+    
+        return (
+            <div style ={{
+    						display: 'flex', justifyContent: 'center', alignItems:'center'
+    						, width: '100%', height: '100vh'
+    			
+    				}}>
+                <h2>시작 페이지</h2>
+            </div>
+        )
+    }
+    export default LandingPage
+    ```
+    
+- **clinet/src/components/views/LoginPage/LoginPage.js 파일 코드 수정**
+    
+    ```jsx
+    import React, { useState } from 'react'
+    
+    function LoginPage() {
+      
+      const [Email, setEmail] = useState("")
+      const [Password, setPassword] = useState("")
+    
+      const onEmailHandler = (event) => {
+        setEmail(event.currentTarget.value)
+      }
+      const onPasswordHandler = (event) => {
+        setPassword(event.currentTarget.value)
+      }
+      
+      return (
+        <div style ={{
+          display: 'flex', justifyContent: 'center', alignItems:'center'
+          , width: '100%', height: '100vh'
+    
+      }}>
+          <form style = {{display :'flex', flexDirection : 'column'}}>
+            
+            <label>Email</label>
+            <input type = "email" value= {Email} onChange ={onEmailHandler} />
+            <label>Password</label>
+            <input type = "password" value = {Password} onChange = {onPasswordHandler} />
+    
+            <br />
+            <button>
+              Login
+            </button>
+    
+          </form>
+      </div>
+      )
+    }
+    
+    export default LoginPage
+    ```
+    
+    **코드 설명**
+    
+    ```jsx
+    const [Email, setEmail] = useState("")
+    const [Password, setPassword] = useState("")
+    ```
+    
+    - 코드에서 상태관리를 위한 변수 설정 set값을 변경하여 입력할 수 있게 해주기 위한 변수
+    - uesState는 ‘react’에서 import
+    
+    ```jsx
+    const onEmailHandler = (event) => {
+        setEmail(event.currentTarget.value)
+      }
+    ```
+    
+    - EmailHandler 함수 : 현재 입력된 값으로 입력값 변경
+    
+    ```jsx
+    <label>Email</label>
+            <input type = "email" value= {Email} onChange ={onEmailHandler} />
+    ```
+    
+    - email 타입에 input을 받고 EmailHandler 함수를 만들어서 그에 따른 상태를 관리
+    
+    ```jsx
+    <button>
+    	Login
+    </button>
+    ```
+    
+    - Login 입력 버튼 생성
+
+</div>
+</details>
+
+### # 22 로그인 페이지 만들기(2)
+
+<details>
+<summary> 로그인 페이지 만들기(2) </summary>
+<div markdown="1">
+
+- **전체 흐름도**
+    
+    <img width="682" alt="스크린샷 2023-01-03 오후 4 13 00" src="https://user-images.githubusercontent.com/79856225/210709498-c7e4ab86-8e88-4cce-88f6-a97f68af861c.png">
+    
+- _**actions**
+    - **types.js 파일 생성**
+        
+        ```jsx
+        export const LOGIN_USER = "login_user";
+        ```
+        
+    - **user_action.js 파일 생성**
+        
+        ```jsx
+        import Axios from 'axios'
+        import {
+            LOGIN_USER
+        }from './types';
+        
+        export function loginUser(dataTosubmit){
+            const request = Axios.post('/api/users/login', dataTosubmit)
+            .then(response =>response.data)
+        
+            return {
+                type: LOGIN_USER,
+                payload : request
+            }
+          
+        }
+        ```
+        
+- **_reducers**
+    - **user_reducer.js 파일 생성**
+        
+        ```jsx
+        import {
+            LOGIN_USER
+        }from '../_actions/types';
+        
+        export default function(state={}, action){
+            switch(action.type){
+                case LOGIN_USER:
+                    return {...state, loginSuccess: action.payload}
+                    break
+                default :
+                    return state;
+                    
+            }
+        }
+        ```
+        
+    - **index.js 파일 수정**
+        
+        ```jsx
+        import { combineReducers} from 'redux';
+        import user from './user_reducer'
+        const rootReducer = combineReducers({
+        	user
+        })
+        
+        export default rootReducer ;
+        ```
+        
+- **clinet/src/components/views/LoginPage/LoginPage.js 파일 코드 수정**
+    
+    ```jsx
+    import React, { useState } from 'react'
+    import {useDispatch} from 'react-redux'
+    import { loginUser } from '../../../_actions/user_action'
+    
+    function LoginPage(props) {
+      const dispatch = useDispatch();
+      
+      const [Email, setEmail] = useState("")
+      const [Password, setPassword] = useState("")
+    
+      const onEmailHandler = (event) => {
+        setEmail(event.currentTarget.value)
+      }
+      const onPasswordHandler = (event) => {
+        setPassword(event.currentTarget.value)
+      }
+    
+      const onSubmitHandler = (event) => {
+        event.preventDefault(); 
+    
+        console.log('Email', Email)
+        console.log('PW', Password)
+    
+        let body = {
+          email : Email,
+          password : Password
+        }
+    
+        dispatch(loginUser(body))
+        .then(response=>{
+          if(response.payload.loginSuccess){
+            props.history.push('/')//메인페이지로 이동
+          }
+          else{
+            alert('Error')
+          }
+        })
+      }
+      
+      return (
+        <div style ={{
+          display: 'flex', justifyContent: 'center', alignItems:'center'
+          , width: '100%', height: '100vh'
+    
+      }}>
+          <form style = {{display :'flex', flexDirection : 'column'}}
+          onSubmit = {onSubmitHandler}>
+            
+            <label>Email</label>
+            <input type = "email" value= {Email} onChange ={onEmailHandler} />
+            <label>Password</label>
+            <input type = "password" value = {Password} onChange = {onPasswordHandler} />
+    
+            <br />
+            <button>
+              Login
+            </button>
+    
+          </form>
+      </div>
+      )
+    }
+    
+    export default LoginPage
+    ```
+
+</div>
+</details>
 <!--
 <details>
 <summary>  </summary>
