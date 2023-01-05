@@ -10,7 +10,6 @@ const config = require("./config/key");
 const e = require('express');
 const cookieParser = require('cookie-parser');
 
-
 // 데이터 분석을 위한 추가 설정
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));  
