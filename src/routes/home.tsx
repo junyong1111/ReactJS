@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import PostTweetFrom from "../components/post-tweet-form";
+import styled from "styled-components";
 
+const Wrapper = styled.div``;
 export default function Home(){
     const navigate = useNavigate()
     const logOut = () => {
@@ -8,7 +11,13 @@ export default function Home(){
         console.log("logout")
         navigate("/login")
     }
-    return <h1>
-        <button onClick={logOut}>Logout</button>
-            </h1>;
+
+    return(
+        <>
+        <Wrapper>
+        <PostTweetFrom/>
+        </Wrapper>
+        </>
+    )
+    
 }
